@@ -14,6 +14,9 @@
 
 BIN_DIR=_output/bin
 RELEASE_DIR=_output/release
+ifeq ($(uname -m),"aarch64")
+REL_OSARCH=linux/arm64
+else
 REL_OSARCH=linux/amd64
 REPO_PATH=volcano.sh/volcano
 IMAGE_PREFIX=volcanosh/vc
