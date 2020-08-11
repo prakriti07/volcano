@@ -15,7 +15,7 @@
 BIN_DIR=_output/bin
 RELEASE_DIR=_output/release
 
-ifeq (aarch64,$(uname -m))
+ifeq (aarch64,$(shell uname -m))
 REL_OSARCH=linux/arm64
 else
 REL_OSARCH=linux/amd64
