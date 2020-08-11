@@ -18,6 +18,7 @@ ifeq ($(uname -m),"aarch64")
 REL_OSARCH=linux/arm64
 else
 REL_OSARCH=linux/amd64
+endif
 REPO_PATH=volcano.sh/volcano
 IMAGE_PREFIX=volcanosh/vc
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
