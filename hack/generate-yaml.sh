@@ -41,7 +41,7 @@ case $LOCAL_OS in
 esac
 
 # Step1. install helm binary
-if [[ ${uname -m} == "aarch64" ]] ; then 
+if [[ "$(uname -m)" == "aarch64" ]] ; then 
     ARCH=arm64
 else
     ARCH=amd64
