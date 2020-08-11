@@ -100,11 +100,13 @@ jobs:
       script:
         - make verify
     - #stage: Verify Deployment Yaml
+      arch: arm64
       script:
         - echo "Verifying contents of installer/development.yaml with generated yaml"
         - make TAG=latest generate-yaml
         - make verify-generated-yaml
     - #stage: UT Tests
+      arch: arm64
       script:
         - make unit-test
     - stage: E2E Tests #E2E Jobs Parallel
@@ -121,6 +123,7 @@ jobs:
         - make images
         - travis_retry make e2e-test-jobp
     - #E2E Job Sequence
+      arch: arm64
       before_script:
         # Download kubectl
         - sudo curl -o /usr/local/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/v1.16.6/bin/linux/arm64/kubectl
@@ -133,6 +136,7 @@ jobs:
         - make images
         - travis_retry make e2e-test-jobseq
     - #E2E Scheduling Base Suits
+      arch: arm64
       before_script:
         # Download kubectl
         - sudo curl -o /usr/local/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/v1.16.6/bin/linux/arm64/kubectl
@@ -144,7 +148,8 @@ jobs:
         - make vcctl
         - make images
         - travis_retry make e2e-test-schedulingbase
-    - #E2E Scheduling Action 
+    - #E2E Scheduling Action
+      arch: arm64
       before_script:
         # Download kubectl
         - sudo curl -o /usr/local/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/v1.16.6/bin/linux/arm64/kubectl
