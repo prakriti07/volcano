@@ -21,7 +21,8 @@ before_install:
     fi
 jobs:
   include:
-    - stage: Code Verify 
+    - stage: Code Verify
+      arch: amd64
       #Golint & Gofmt
       script:
         - make verify
@@ -35,6 +36,7 @@ jobs:
         - make unit-test
 
     - stage: E2E Tests #E2E Jobs Parallel
+      arch: amd64
       before_script:
         # Download kubectl
         - sudo curl -o /usr/local/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/v1.16.6/bin/linux/amd64/kubectl
@@ -91,22 +93,21 @@ jobs:
           script: make TAG=latest RELEASE_VER=latest release
           on:
             condition: $TRAVIS_EVENT_TYPE = cron
-    - stage: Golint & Gofmt
+    - stage: Code Verify 
+      #Golint & Gofmt
       arch: arm64
       install: sudo apt-get install jq
       script:
         - make verify
-    - stage: Verify Deployment Yaml
-      arch: arm64
+    - #stage: Verify Deployment Yaml
       script:
         - echo "Verifying contents of installer/development.yaml with generated yaml"
         - make TAG=latest generate-yaml
         - make verify-generated-yaml
-    - stage: UT Tests
-      arch: arm64
+    - #stage: UT Tests
       script:
         - make unit-test
-    - stage: E2E Job
+    - stage: E2E Tests #E2E Jobs Parallel
       arch: arm64
       before_script:
         # Download kubectl
@@ -118,9 +119,8 @@ jobs:
       script:
         - make vcctl
         - make images
-        - make e2e-test-job
-    - stage: E2E Scheduling
-      arch: arm64
+        - travis_retry make e2e-test-jobp
+    - #E2E Job Sequence
       before_script:
         # Download kubectl
         - sudo curl -o /usr/local/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/v1.16.6/bin/linux/arm64/kubectl
@@ -131,7 +131,31 @@ jobs:
       script:
         - make vcctl
         - make images
-        - make e2e-test-scheduling
+        - travis_retry make e2e-test-jobseq
+    - #E2E Scheduling Base Suits
+      before_script:
+        # Download kubectl
+        - sudo curl -o /usr/local/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/v1.16.6/bin/linux/arm64/kubectl
+        - sudo chmod +x /usr/local/bin/kubectl
+        # Download kind binary (0.6.1)
+        - sudo curl -o /usr/local/bin/kind -L https://github.com/kubernetes-sigs/kind/releases/download/v0.6.1/kind-linux-arm64
+        - sudo chmod +x /usr/local/bin/kind
+      script:
+        - make vcctl
+        - make images
+        - travis_retry make e2e-test-schedulingbase
+    - #E2E Scheduling Action 
+      before_script:
+        # Download kubectl
+        - sudo curl -o /usr/local/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/v1.16.6/bin/linux/arm64/kubectl
+        - sudo chmod +x /usr/local/bin/kubectl
+        # Download kind binary (0.6.1)
+        - sudo curl -o /usr/local/bin/kind -L https://github.com/kubernetes-sigs/kind/releases/download/v0.6.1/kind-linux-arm64
+        - sudo chmod +x /usr/local/bin/kind
+      script:
+        - make vcctl
+        - make images
+        - travis_retry make e2e-test-schedulingaction    
     - stage: Publish latest Docker Image on Daily Build
       arch: arm64
       script:
