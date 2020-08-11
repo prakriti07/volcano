@@ -51,7 +51,7 @@ if [[ ! -f "${HELM_BIN_DIR}/version.helm.${HELM_VER}" ]] ; then
     cd "${TD}" && \
         curl -Lo "${TD}/helm.tgz" "https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VER}-${LOCAL_OS}-${ARCH}.tar.gz" && \
         tar xfz helm.tgz && \
-        mv ${LOCAL_OS}-amd64/helm "${HELM_BIN_DIR}/helm-${HELM_VER}" && \
+        mv ${LOCAL_OS}-${ARCH}/helm "${HELM_BIN_DIR}/helm-${HELM_VER}" && \
         cp "${HELM_BIN_DIR}/helm-${HELM_VER}" "${HELM_BIN_DIR}/helm" && \
         chmod +x ${HELM_BIN_DIR}/helm
         rm -rf "${TD}" && \
