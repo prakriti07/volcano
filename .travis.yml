@@ -27,6 +27,7 @@ jobs:
       script:
         - make verify
     - #Verify Deployment Yaml
+      arch: amd64
       script:
         - echo "Verifying contents of installer/development.yaml with generated yaml"
         - make TAG=latest generate-yaml
@@ -49,6 +50,7 @@ jobs:
         - make images
         - travis_retry make e2e-test-jobp
     - #E2E Job Sequence
+      arch: amd64
       before_script:
         # Download kubectl
         - sudo curl -o /usr/local/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/v1.16.6/bin/linux/amd64/kubectl
@@ -62,6 +64,7 @@ jobs:
         - travis_retry make e2e-test-jobseq
    
     - #E2E Scheduling Base Suits
+      arch: amd64
       before_script:
         # Download kubectl
         - sudo curl -o /usr/local/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/v1.16.6/bin/linux/amd64/kubectl
@@ -73,7 +76,8 @@ jobs:
         - make vcctl
         - make images
         - travis_retry make e2e-test-schedulingbase
-    - #E2E Scheduling Action 
+    - #E2E Scheduling Action
+      arch: amd64
       before_script:
         # Download kubectl
         - sudo curl -o /usr/local/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/v1.16.6/bin/linux/amd64/kubectl
@@ -86,6 +90,7 @@ jobs:
         - make images
         - travis_retry make e2e-test-schedulingaction
     - stage: Publish latest Docker Image on Daily Build
+      arch: amd64
       script:
         - echo "Publish latest Docker Images to DockerHub"
       deploy:
